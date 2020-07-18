@@ -10,7 +10,7 @@ class Fib extends Component {
     index: ''
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault()
     const { index } = this.state
     const postBody = { index }
