@@ -144,11 +144,11 @@ Since we only have tests for the UI, we have just this one line. Here is where y
 
 ```
 script:
-  - docker run simmonson/react-test npm test -- --coverage
+  - - docker run -e CI=true simmonson/react-test npm run test -- --coverage
 ```
 
-• `run simmonson/react-test`: Run the docker container of the specified image.    
-• We need it to exit with code 0, any other code is a fail. We also need to override the default npm run command with `npm test`    
+• `run -e CI=true simmonson/react-test`: Run the docker container of the specified image. The `-e CI=true` is an update with how [jest works with CRA](https://facebook.github.io/create-react-app/docs/running-tests#linux-macos-bash)    
+• We need it to exit with code 0, any other code is a fail. We also need to override the default npm run command with `npm run test`    
 • `-- --coverage`: To override the watch mode of `npm run test`, we need these flags to exit upon test completion with a 0 or non 0.    
 
 ### After success:
