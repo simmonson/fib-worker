@@ -112,3 +112,40 @@ location /sockjs-node {
   }
 ```
 in the `/nginx/default.conf` file.
+
+## Finalizing dockerfiles
+At this point we can create multiple production `Dockerfile`s. Notice how each of `client`, `server`, `nginx`, and `worker` have `Dockerfile` and `Dockerfile.dev`. The prod `Dockerfile` manages production deployment (See `/nginx` for a clear difference to use the right `.conf` files)
+
+For the client, since this is the UI the user will access, we need to ensure that there is a separate nginx server that serves the react production files and exposes the port to the routing nginx server. This is different than the first nginx (that handles upstream server requests). [See image for details](./readme-images/nginx-for-ui.png)
+
+## Setting up travis.yml and creating aws elastic beanstalk
+
+We will use travis-ci to build dev env apps, run tests, and upon passed tests, build a prod app and push the images to docker hub. Then the elastic beanstalk will be alerted of any future updates to the docker hub.
+
+
+### Travis CI Flow:
+
+[Diagram here](./readme-images/travis-ci-multi-deployment-flow.png)
+
+```
+before_install:
+  - docker build -t simmonson/react-test -f ./client/Dockerfile.dev ./client
+```
+
+`-t simmonson/react-test`: tag image with docker id and image name
+`-f ./client/Dockerfile.dev`: Specify the dockerfile to be used
+`./client`: The build context. In some dockerfiles, we have previously defined this as `.` because it's in the current root dir. Now, we need to specify the nested folder `./client` as the build context - look into the client dir to get the build context
+
+Since we only have tests for the UI, we have just this one line. Here is where you will build more docker images to prep the test step.
+
+
+### Define script to run
+
+```
+script:
+  - docker run simmonson/react-test npm test -- --coverage
+```
+
+`run simmonson/react-test`: Run the docker container of the specified image.
+We need it to exit with code 0, any other code is a fail. We also need to override the default npm run command with `npm test`
+`-- --coverage`: To override the watch mode of `npm run test`, we need these flags to exit upon test completion with a 0 or non 0.
