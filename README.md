@@ -70,4 +70,45 @@ nginx:
     ports:
       - '3050:80'
 ```
-      
+
+## Starting up Docker Compose
+`docker-compose down && docker-compose up --build`: `--build` to force a rebuild when changing docker compose configuration
+
+### TROUBLESHOOTING: There can be an edge case where the nginx upstream connection fails after building the container:
+
+
+Problem: `connect() failed (111: Connection refused) while connecting to upstream, client:[DOCKER INTERNAL IP], server:, request: "GET / HTTP/1.1", upstream: [NETWORK IP]`
+
+Solution: 
+```
+ nginx:
+    depends_on:
+      - api
+      - client
+```      
+
+When entering application via `localhost:3050`, if you see "I calculated Nothing yet!" for each index entered, we can try:
+```
+worker:
+  environment:
+    - REDIS_HOST=redis
+    - REDIS_PORT=6379
+```
+as well as
+```
+api:
+  depends_on:
+    - postgres
+```
+See [depends on](https://docs.docker.com/compose/compose-file/#depends_on) for reference.
+
+We get a websocket error in when starting up the application on `localhost:3050`. This is because we haven't set any websocket communication to go through when we make changes to the local source code. To fix this, we need to do:
+```
+location /sockjs-node {
+    proxy_pass http://client;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+  }
+```
+in the `/nginx/default.conf` file.

@@ -14,6 +14,7 @@ class Fib extends Component {
     event.preventDefault()
     const { index } = this.state
     const postBody = { index }
+    console.log('postBody: ', postBody)
     await axios.post('/api/values', postBody)
 
     this.setState({ index: defaultIndex })
@@ -26,6 +27,7 @@ class Fib extends Component {
 
   async fetchValues() {
     const values = await axios.get('/api/values/current')
+    console.log(values)
     this.setState({ values: values.data })
   }
 
@@ -49,6 +51,7 @@ class Fib extends Component {
         </div>
       )
     }
+    console.log(entries)
     return entries
   }
 
