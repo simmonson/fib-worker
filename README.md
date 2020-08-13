@@ -132,12 +132,13 @@ before_install:
   - docker build -t simmonson/react-test -f ./client/Dockerfile.dev ./client
 ```
 
-`-t simmonson/react-test`: tag image with docker id and image name
-`-f ./client/Dockerfile.dev`: Specify the dockerfile to be used
-`./client`: The build context. In some dockerfiles, we have previously defined this as `.` because it's in the current root dir. Now, we need to specify the nested folder `./client` as the build context - look into the client dir to get the build context
+`-t simmonson/react-test`: tag image with docker id and image name    
+`-f ./client/Dockerfile.dev`: Specify the dockerfile to be used    
+`./client`: The build context. In some dockerfiles, we have previously defined this as `.` because it's in the current root dir.    
+
+Now, we need to specify the nested folder `./client` as the build context - look into the client dir to get the build context
 
 Since we only have tests for the UI, we have just this one line. Here is where you will build more docker images to prep the test step.
-
 
 ### Define script to run
 
@@ -146,6 +147,6 @@ script:
   - docker run simmonson/react-test npm test -- --coverage
 ```
 
-`run simmonson/react-test`: Run the docker container of the specified image.
-We need it to exit with code 0, any other code is a fail. We also need to override the default npm run command with `npm test`
-`-- --coverage`: To override the watch mode of `npm run test`, we need these flags to exit upon test completion with a 0 or non 0.
+`run simmonson/react-test`: Run the docker container of the specified image.    
+We need it to exit with code 0, any other code is a fail. We also need to override the default npm run command with `npm test`    
+`-- --coverage`: To override the watch mode of `npm run test`, we need these flags to exit upon test completion with a 0 or non 0.    
