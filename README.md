@@ -132,9 +132,9 @@ before_install:
   - docker build -t simmonson/react-test -f ./client/Dockerfile.dev ./client
 ```
 
-`-t simmonson/react-test`: tag image with docker id and image name    
-`-f ./client/Dockerfile.dev`: Specify the dockerfile to be used    
-`./client`: The build context. In some dockerfiles, we have previously defined this as `.` because it's in the current root dir.    
+• `-t simmonson/react-test`: tag image with docker id and image name    
+• `-f ./client/Dockerfile.dev`: Specify the dockerfile to be used    
+• `./client`: The build context. In some dockerfiles, we have previously defined this as `.` because it's in the current root dir.    
 
 Now, we need to specify the nested folder `./client` as the build context - look into the client dir to get the build context
 
@@ -147,6 +147,25 @@ script:
   - docker run simmonson/react-test npm test -- --coverage
 ```
 
-`run simmonson/react-test`: Run the docker container of the specified image.    
-We need it to exit with code 0, any other code is a fail. We also need to override the default npm run command with `npm test`    
-`-- --coverage`: To override the watch mode of `npm run test`, we need these flags to exit upon test completion with a 0 or non 0.    
+• `run simmonson/react-test`: Run the docker container of the specified image.    
+• We need it to exit with code 0, any other code is a fail. We also need to override the default npm run command with `npm test`    
+• `-- --coverage`: To override the watch mode of `npm run test`, we need these flags to exit upon test completion with a 0 or non 0.    
+
+### After success:
+Build images for production by tagging an image name and defining the context:
+```
+- docker build -t simmonson/multi-client ./client
+- docker build -t simmonson/multi-nginx ./nginx
+- docker build -t simmonson/multi-server ./server
+- docker build -t simmonson/multi-worker ./worker
+```
+
+Then, we need to push these images to docker hub. But before that, we need to login via docker CLI. To do this, we can add a step:
+```
+  # Log in to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+```
+
+• `-echo "$DOCKER_PASSWORD"`: Retrieves value stored in travis-ci's env variables and uses it in next cli cmd via `stdin`        
+• `docker login -u "$DOCKER_ID"`: use docker CLI to login with the `DOCKER_ID` env variable    
+• `--password-stdin`: Expects password to be received (password is the prompt from docker CLI) via stdin, which is from the left hand side of the pipe.    
