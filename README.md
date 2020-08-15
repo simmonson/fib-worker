@@ -230,6 +230,15 @@ You can really mess up the container requests by defining `"hostname"` as `"goog
 
 *** PRO TIP - JSON Validator on ECS is not very good, google some JSON validator and validate your `Dockerrun.aws.json` to validate instead ***
 
+## AWS Architecture
+Compare the two architectures below. The dev environment is different than production, and we are not simply using AWS EB for deployment:
+![Multi Container Docker Architecture for Dev](./readme-images/multi-docker-dev.png)
+![Production Multi Container Docker Architecture within AWS](./readme-images/multi-docker-prod-aws.png)
+
+AWS Elastic Cache and AWS Relational Database Services are unopinionated services that give production benefits for deployment. For instance, the AWS Elastic Cache has the benefits shown in the ![image below](./readme-images/aws-elastic-cache.png)
+
+
+
 ## AWS Config Cheat Sheet below
 
 ```
