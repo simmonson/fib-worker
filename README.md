@@ -226,7 +226,7 @@ You can really mess up the container requests by defining `"hostname"` as `"goog
   ]
 ```
 
-![See diagram]('./readme-images/aws-eb-ecs-links.png)    
+![See diagram](./readme-images/aws-eb-ecs-links.png)    
 
 *** PRO TIP - JSON Validator on ECS is not very good, google some JSON validator and validate your `Dockerrun.aws.json` to validate instead ***
 
@@ -235,7 +235,13 @@ Compare the two architectures below. The dev environment is different than produ
 ![Multi Container Docker Architecture for Dev](./readme-images/multi-docker-dev.png)
 ![Production Multi Container Docker Architecture within AWS](./readme-images/multi-docker-prod-aws.png)
 
-AWS Elastic Cache and AWS Relational Database Services are unopinionated services that give production benefits for deployment. For instance, the AWS Elastic Cache has the benefits shown in the ![image below](./readme-images/aws-elastic-cache.png)
+AWS Elastic Cache and AWS Relational Database Services are unopinionated services that give production benefits for deployment.    
+
+#### The AWS Elastic Cache has the benefits shown below
+![aws-elastic-cache](./readme-images/aws-elastic-cache.png)
+
+#### AWS Relational Database Service has greate benefits, especially Automated backups. Setting up automated backups is difficult and can be costly. AWS RDS already has a system that does this for you and can rollback in one or two button clicks:
+![aws-relational-db-service](./readme-images/aws-relational-db-service.png)
 
 
 
