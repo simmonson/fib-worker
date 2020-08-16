@@ -306,6 +306,41 @@ dbpassword=postgres_password
 Notice we just chose the default security group rules. We will create a new security group rule to achieve our main goal: 
 #### Allow any traffic from any other AWS service that has this security group    
 
+## Creating Security Group
+Head over to `VPC/SecurityGroups/Create New SecurityGroup`. Our configs for `Basic Details were:
+![vpc-security-group-basic-details](./readme-images/vpc-security-group-basic-details)
+
+Ensure to choose the default VPC that was created for our EB instance.
+
+Create security group. This is easier to edit inbound rules instead of doing it all at once.
+
+Once created, you can edit `Inbound Rules`. See image below for configs. Ensure source is `custom`, and the security group that was just created is chosen so that only the services that are within this security group can access the ports:
+![vpc-custom-security-group-rule](./readme-images/vpc-custom-security-group-rule.png)
+
+Now that we created the security group, we have to go back to all 3 of our services (api EB instance, RDS Postgres, and Elasticache Redis) and assign the security group to each one.
+
+## Security Group for EC Redis
+• Go to Elasticache, click on Redis, select the redis instance created, and click `Actions` dropdown and then `Modify`    
+• Click on `VPC Security Group(s)` edit pencil button, and choose the security group we created:
+![ec-redis-security-group-apply](./readme-images/ec-redis-security-group-apply.png)
+*** PRO TIP - changing security group doesn't need maintenance time, even though the prompt shows maintenance scheduler ***
+• Now click `Modify`    
+
+## Security Group for RDS Postgres
+• Go to `RDS/Databases` and select the database we created    
+• Click `Modify` on the top right button and under `Network & Security`, you can select the custom security group we created:
+![rds-security-group-apply](./readme-images/rds-security-group-apply.png)
+• Click `Continue`. Next window shows maint scheulder; same pro tip, doesn't need maintenance schedule. Click `Modify DB Instance`. The security groups should be modified after a little while by checking the db instance.    
+
+## Security Group for API Server (EB Instance)
+• Go to `Elastic Beanstalk/[name of eb instance]/Configuration(left-hand side)/Instances(Edit)`    
+• Under `EC2 Security Groups`, click on the checkbox beside the custom security group we created and click `Apply`    
+• At this point, a new page with a warning about the EC2 instance restarting will appear which is what we want because we're not doing anything with this instance yet.    
+
+## Setting Environment Variables
+
+
+
 ## AWS Config Cheat Sheet below
 
 ```
