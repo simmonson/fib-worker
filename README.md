@@ -243,7 +243,18 @@ AWS Elastic Cache and AWS Relational Database Services are unopinionated service
 #### AWS Relational Database Service has greate benefits, especially Automated backups. Setting up automated backups is difficult and can be costly. AWS RDS already has a system that does this for you and can rollback in one or two button clicks:
 ![aws-relational-db-service](./readme-images/aws-relational-db-service.png)
 
+### When creating an EB Instance...
+It is created within a specific region. This example defaulted to Oregon, or `us-west-2`, the technical term for the region. In each of these regions, when creating an EB instance, you get a `Virtual Private Cloud` (VPC).
 
+It is its own private network, so all services and instances created are isolated to just your aws account. The VPC is used for security rules and connecting the different services within the VPC. You automatically get one "default" VPC per region. ![VPC]('./readme-images/aws-vpc.png)
+
+### Security Group
+Fancy term for "Firewall rule". This helps with connecting different services within the VPC.
+
+A default security group is created that allows:
+• Any incoming traffic on Port 80 from any IP
+• Any incoming traffic on Port 3010 from IP 172.0.40.2    
+![security-group](./readme-images/aws-security-group.png)
 
 ## AWS Config Cheat Sheet below
 
