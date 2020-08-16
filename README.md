@@ -170,7 +170,7 @@ Then, we need to push these images to docker hub. But before that, we need to lo
 • `docker login -u "$DOCKER_ID"`: use docker CLI to login with the `DOCKER_ID` env variable    
 • `--password-stdin`: Expects password to be received (password is the prompt from docker CLI) via stdin, which is from the left hand side of the pipe.    
 
-## Deployment to AWS
+# Deployment to AWS
 We need a `Dockerrun.aws.json` image to handle all the Dockerfiles inside of the root directory. 
 
 AWS Elastic Beanstalk actualy uses AWS Elastic Container Services (ECS) to run containers. You define a single "Task Definition" to run a single container within the AWS ECS as shown ![below](./readme-images/eb-to-ecs.png)
@@ -252,9 +252,48 @@ It is its own private network, so all services and instances created are isolate
 Fancy term for "Firewall rule". This helps with connecting different services within the VPC.
 
 A default security group is created that allows:
-• Any incoming traffic on Port 80 from any IP
-• Any incoming traffic on Port 3010 from IP 172.0.40.2    
+• Any incoming traffic on Port 80 from any IP to EB instance
 ![security-group](./readme-images/aws-security-group.png)
+
+Select the region that your multi-container docker app is in, and head over to `VPC/Security Groups/[SecurityGroupID]`. You will see its inbound rules and the default rules of Port 80 exposed to any IP:![security-group-inbound-rule](./readme-images/aws-vpc-security-groups-inbound-rules.png)
+
+Our security group rule for the services to talk to each other will be:
+#### Allow any traffic from any other AWS service that has this security group    
+![custom-security-group-plan](./readme-images/custom-security-group-rule.png)
+
+# Creating AWS Relational Database Service
+• Search for `RDS` in the management console    
+• Click on `RDS`, and click on `Create Database` button    
+• Click on the db used (this app is using postgres)    
+• Ensure to click "Free tier" under `Templates`. Any aws account over one year old will not qualify for this, even if this option is available    
+• Under `Settings` and `Credentials Settings`, type in a master username and password. In our local dev, we defined in our env vars in the api service in `docker-compose.yml`:    
+```
+api:
+  build:
+    context: ./server
+    dockerfile: Dockerfile.dev
+  volumes:
+    - /app/node_modules
+    - ./server:/app
+  environment:
+    - REDIS_HOST=redis
+    - REDIS_PORT=6379
+    - PGUSER=postgres
+    - PGHOST=postgres
+    - PGDATABASE=postgres
+    - PGPASSWORD=postgres_password
+    - PGPORT=5432
+``` 
+Similarly, we want to ensure we remember the master username and password, which will be the env variables in the api service we create and store.
+
+• Under `Connectivity`, ensure our default VPC is selected. We also ideally want Subnet group but we skipped over this for now. Also we want `Publicly Accessible` section to be `No`, because this RDS should only be accessed by our api service. See images below for further config settings that we chose:    
+![rds-connectivity](./readme-images/rds-connectivity.png)
+![rds-db-configs](./readme-images/rds-db-configs.png)
+
+dbname=fibvalues
+dbuser=postgres
+dbpassword=postgres_password
+
 
 ## AWS Config Cheat Sheet below
 
