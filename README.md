@@ -294,6 +294,17 @@ dbname=fibvalues
 dbuser=postgres
 dbpassword=postgres_password
 
+# Creating AWS Redis Elasticache Service
+• Search for `elasticache` in the management console    
+• Click on `Elasticache`, then on `Create` button    
+• Ensure to choose the lowest/cheapest node type (cache.t2.micro):
+![elasticache-node-type-cheap](./readme-images/elasticache-node-type-cheap.png)
+• See below for rest of settings. Those settings not shown in images are just the default settings chosen:
+![redis-configs-1](./readme-images/redis-configs-1.png)
+![redis-configs-2](./readme-images/redis-configs-2.png)
+
+Notice we just chose the default security group rules. We will create a new security group rule to achieve our main goal: 
+#### Allow any traffic from any other AWS service that has this security group    
 
 ## AWS Config Cheat Sheet below
 
