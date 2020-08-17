@@ -372,13 +372,10 @@ deploy:
   on:
     branch: master
   access_key_id: $AWS_ACCESS_KEY
-  secret_access_key:
-    secure: $AWS_SECRET_KEY
+  secret_access_key: $AWS_SECRET_KEY
 ```
 `bucket_name` here:
 ![bucket_name-location](./readme-images/bucket_name-location.png)
-access_key_id: $AWS_ACCESS_KEY
-secret_access_key: $AWS_SECRET_KEY
 
 If you are getting a persistent missing bucket_name error with a failed build you will need to add the following to your `.travis.yml` file:
 ```
