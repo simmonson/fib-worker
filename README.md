@@ -338,6 +338,23 @@ Now that we created the security group, we have to go back to all 3 of our servi
 • At this point, a new page with a warning about the EC2 instance restarting will appear which is what we want because we're not doing anything with this instance yet.    
 
 ## Setting Environment Variables
+Go to your EB instance (we called in "multi-docker"), and click `Configuration` on the left hand side, then click `Edit` on the `Software` card.
+*** PRO TIP - The env variables are not hidden here ***
+
+Below are the key/value pairs for the env variables, and tips on how to get the values:
+
+`REDIS_HOST=[primary-endpoint-from-elasticache-instance]`
+Get the primary endpoint by going to `Elasticache/Redis`, opening the dropdown on the ec instance (we called it "multi-docker-redis"), and getting the primary endpoint. The port number is not necessary
+
+`REDIS_PORT=[see-elasticache-instance]`
+`PGDATABASE=[see-rds-instance]`
+`PGHOST=[should-have-saved-this-when-creating-rds-instance]`
+`PGPASSWORD=[should-have-saved-this-when-creating-rds-instance]`
+`PGPORT=[see-rds-instance]`
+`PGUSER=postgres`
+
+** PRO TIP - When setting these variables on EBS, all the containers listed in the `Dockerrun.aws.json` file has access to these variables, so you don't need to specify env variables for each container **
+
 
 
 
