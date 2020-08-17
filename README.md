@@ -386,6 +386,24 @@ deploy:
 ```
 What this is doing is forcing Travis to use the v2 (experimental) version of the dpl script which does not have the bug.
 
+## We forgot a param in ther `Dockerrun.aws.json` file!
+We need to define memory allocation for each container - how much RAM? We decided 128MB across the board.
+
+Below shows the error shown on aws ebs:
+![ebs-error-mem-allocation](./readme-images/ebs-error-mem-allocation.png)
+
+Below is an example of mem allocationin our `Dockerrun.aws.json` file:
+```
+{
+  "name": "client",
+  "image": "simmonson/multi-client",
+  "hostname": "client",
+  "essential": false,
+  "memory": 128
+}
+```
+
+
 
 ## AWS Config Cheat Sheet below
 
