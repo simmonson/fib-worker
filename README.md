@@ -355,7 +355,39 @@ Get the primary endpoint by going to `Elasticache/Redis`, opening the dropdown o
 
 ** PRO TIP - When setting these variables on EBS, all the containers listed in the `Dockerrun.aws.json` file has access to these variables, so you don't need to specify env variables for each container **
 
+## IAM Keys for Deployment
+Created an IAM user that has all access clicked on `beanstalk` when getting existing user restrictions.
 
+## Travis Deploy Script
+Added the below in the `.travis.yml` file:
+```
+deploy:
+  edge: true // issue with travis yml with bucket_name error
+  provider: elasticbeanstalk
+  region: us-west-2 // region your app is in
+  app: multi-docker // name of your eb instance
+  env: MultiDocker-env // env name of your eb instance
+  bucket_name: elasticbeanstalk-us-west-2-720252850272 // See image for where to get bucket_name
+  bucket_paht: docker-multi // we created this name on the spot
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: $AWS_SECRET_KEY
+```
+`bucket_name` here:
+![bucket_name-location](./readme-images/bucket_name-location.png)
+access_key_id: $AWS_ACCESS_KEY
+secret_access_key: $AWS_SECRET_KEY
+
+If you are getting a persistent missing bucket_name error with a failed build you will need to add the following to your `.travis.yml` file:
+```
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  ...
+```
+What this is doing is forcing Travis to use the v2 (experimental) version of the dpl script which does not have the bug.
 
 
 ## AWS Config Cheat Sheet below
