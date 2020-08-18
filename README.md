@@ -403,6 +403,10 @@ Below is an example of mem allocationin our `Dockerrun.aws.json` file:
 }
 ```
 
+## Cleaning up and deleting instances on AWS
+We need to delete the EB, RDS, and EC instances. We don't nteed to delete security groups:
+![aws-multi-docker-cleanup](./readme-images/aws-multi-docker-cleanup.png)
+
 
 
 ## AWS Config Cheat Sheet below
